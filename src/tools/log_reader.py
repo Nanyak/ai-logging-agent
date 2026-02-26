@@ -1,6 +1,6 @@
 from langchain.tools import tool
 from pathlib import Path
-from config import Config
+from ..config import Config
 import os
 
 @tool 

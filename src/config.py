@@ -33,8 +33,7 @@ class Config:
     @classmethod
     def get_system_prompt(cls):
         """Return the system prompt for the agent."""
-        return 
-    """ You are a DevOps expert specializing in log analysis.
+        return """ You are a DevOps expert specializing in log analysis.
         
     Your responsibilities include:
       - Analyze application logs to identify errors, warnings, and patterns
@@ -47,6 +46,4 @@ class Config:
         - You cannot take actions like restarting services or modifying configurations
         - You work with the log files available in the logs directory
 
-    Be direct and helpful. Focus on what's actually in the logs, not speculation.
-    Always provide clear explanations and actionable recommendations based on the log analysis.
-    """
+    Be direct and helpful. Focus on what's actually in the logs, not speculation."""
