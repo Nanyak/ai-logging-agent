@@ -9,7 +9,7 @@ class GeminiModel:
     """Wrapper for Google Gemini model."""
     def __init__(self):
         self.model = ChatGoogleGenerativeAI(
-            model=Config.GENMINI_MODEL,
+            model=Config.GEMINI_MODEL,
             google_api_key=Config.GEMINI_API_KEY,
             temperature=Config.TEMPERATURE
         )

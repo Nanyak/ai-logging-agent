@@ -16,7 +16,7 @@ def read_log_file(file_name: str) -> str:
         str: The content of the log file or an error message if reading fails.
 
     """
-    log_path = Path(Config.LOGS_DIRECTORY) / file_name
+    log_path = Path(Config.LOG_DIRECTORY) / file_name
     try:
         with open(log_path, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -25,7 +25,7 @@ def read_log_file(file_name: str) -> str:
             line_count = content.count('\n') + 1
         return f"File: {file_name}\nSize: {file_size} bytes\nLines: {line_count}\n\n{content}"
     except FileNotFoundError:
-        return f"Error: Log file '{file_name}' not found in {Config.LOGS_DIRECTORY}."
+        return f"Error: Log file '{file_name}' not found in {Config.LOG_DIRECTORY}."
     except PermissionError:
         return f"Error: Permission denied when trying to read '{file_name}'."
     except Exception as e:
@@ -39,18 +39,18 @@ def list_log_files() -> str:
     Returns:
         String containing list of available log files with their sizes
     """
-    log_dir = Path(Config.LOGS_DIRECTORY)
+    log_dir = Path(Config.LOG_DIRECTORY)
     
     if not log_dir.exists():
-        return f"Error: Log directory '{Config.LOGS_DIRECTORY}' does not exist"
+        return f"Error: Log directory '{Config.LOG_DIRECTORY}' does not exist"
     
     try:
         log_files = [f for f in log_dir.iterdir() if f.is_file() and f.suffix == '.log']
         
         if not log_files:
-            return f"No .log files found in {Config.LOGS_DIRECTORY}/ directory"
+            return f"No .log files found in {Config.LOG_DIRECTORY}/ directory"
         
-        result = f"Available log files in {Config.LOGS_DIRECTORY}/:\n\n"
+        result = f"Available log files in {Config.LOG_DIRECTORY}/:\n\n"
         for log_file in sorted(log_files):
             size = log_file.stat().st_size
             size_kb = size / 1024
@@ -74,7 +74,7 @@ def search_logs(filename: str, search_term: str) -> str:
     Returns:
         String containing matching log lines with line numbers
     """
-    log_path = Path(Config.LOGS_DIRECTORY) / filename
+    log_path = Path(Config.LOG_DIRECTORY) / filename
     
     try:
         with open(log_path, 'r', encoding='utf-8') as f:
@@ -94,7 +94,7 @@ def search_logs(filename: str, search_term: str) -> str:
         return result
     
     except FileNotFoundError:
-        return f"Error: Log file '{filename}' not found in {Config.LOGS_DIRECTORY}."
+        return f"Error: Log file '{filename}' not found in {Config.LOG_DIRECTORY}."
     except Exception as e:
         return f"Error searching '{filename}': {str(e)}"
 

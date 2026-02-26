@@ -62,44 +62,39 @@ class LogAnalyzerAgent:
         
         self.session_id = "default_session"
     
-    def process_query(self, user_input: str) -> str:
+    def process_query(self, user_input: str, chat_history: list=None) -> str:
         """
         Process a user query and return the response.
         
         Args:
             user_input: User's question or command
-        
+            chat_history: Optional list of previous messages in the conversation
         Returns:
             String containing the agent's response
         """
+        if chat_history is None:
+            chat_history = []
         try:
-            # Get response from chain with history
-            response = self.chain_with_history.invoke(
-                {"input": user_input},
-                config={"configurable": {"session_id": self.session_id}}
+            # Format message for the prompt 
+            messages = self.prompt.format_messages(
+                chat_history=chat_history,
+                input=user_input
             )
+            # Get response from the model with tools
+            response = self.llm_with_tools.invoke(messages)
             
             # Check if model wants to use tools
             if hasattr(response, 'tool_calls') and response.tool_calls:
-                return self._handle_tool_calls(response, user_input)
+                return self._handle_tool_calls(response, user_input, chat_history)
             else:
-                # Direct response without tools
-                response_text = extract_response_text(response)
-                
-                # Add to chat history
-                self.chat_history.add_user_message(user_input)
-                self.chat_history.add_ai_message(response_text)
-                
-                return response_text
-        
+                return extract_response_text(response)
         except Exception as e:
-            error_msg = f"Error processing query: {str(e)}"
+            error_msg = f"Error formatting messages: {str(e)}"
             print(f"\n{error_msg}")
             import traceback
             traceback.print_exc()
             return error_msg
-    
-    def _handle_tool_calls(self, response, user_input: str) -> str:
+    def _handle_tool_calls(self, response, user_input: str, chat_history: list) -> str:
         """
         Handle tool calls from the model.
         

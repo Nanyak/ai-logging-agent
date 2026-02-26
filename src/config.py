@@ -11,11 +11,11 @@ class Config:
     """Application configuration."""
     # API Configuration
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-    GENMINI_MODEL = os.getenv("GENMINI_MODEL", "gemini-2.5-flash")
+    GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     TEMPERATURE = float(os.getenv("TEMPERATURE", 0.1))
 
     # Path to logs directory
-    LOGS_DIRECTORY = os.getenv("LOGS_DIRECTORY", "logs")
+    LOG_DIRECTORY = os.getenv("LOG_DIRECTORY", "logs")
 
     # Agent configuration
     MAX_ITERATIONS = int(os.getenv("MAX_ITERATIONS", 5))
@@ -26,9 +26,9 @@ class Config:
         """Validate that all required configuration is set."""
         if not cls.GEMINI_API_KEY:
             raise ValueError("GEMINI_API_KEY environment variable not set.")
-        if not os.path.isdir(cls.LOGS_DIRECTORY):
-            os.makedirs(cls.LOGS_DIRECTORY, exist_ok=True)
-            print(f"Created logs directory at {cls.LOGS_DIRECTORY}")
+        if not os.path.isdir(cls.LOG_DIRECTORY):
+            os.makedirs(cls.LOG_DIRECTORY, exist_ok=True)
+            print(f"Created logs directory at {cls.LOG_DIRECTORY}")
         
     @classmethod
     def get_system_prompt(cls):
